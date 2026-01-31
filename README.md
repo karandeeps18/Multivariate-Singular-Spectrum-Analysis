@@ -37,34 +37,11 @@ Missing values are concentrated by maturity and time, indicating **structural ga
 
 ## Technical Methodology
 
-### 1. Hankel Matrix Construction
-We transform the time series into a trajectory matrix (Hankel matrix) to capture temporal dependencies:
-Hankel Matrix is a rectangular matrix in which each ascending skew-diagonal from left to right is constant as shown in the image below 
+To capture the time dependent structure in CDS spreads, each maturity’s time series is first transformed into Hankel matrix. A Hankel matrix is constructed so that each diagonal from left to right contains the same value, allowing overlapping segments of the time series to be viewed together. Then it is decomposed using Singular Value Decomposition (SVD). SVD factors the matrix into three components: left singular vectors, singular values, and right singular vectors. Intuitively, this separates the data into a set of orthogonal patterns ranked by importance. The largest singular values correspond to dominant, systematic structures in the data, while smaller singular values capture noise or idiosyncratic variation.
 
-### 2. SVD Decomposition
-Singular Value Decomposition (SVD) is a fundamental matrix factorization technique that breaks any matrix (real or complex) into three simpler matrices: two orthogonal (or unitary) matrices $U, V^{T}$ representing rotations/reflections, and a diagonal matrix $\Sigma$ containing non-negative singular values that scale the data, effectively showing the relative importance of different directions
+Reconstruction is performed by retaining only the top k singular components (in our dataset k=15). This produces a low-rank approximation of the original Hankel matrix that preserves the dominant dynamics while filtering out noise. By focusing on the most important components, the reconstructed series reflects the underlying term-structure behavior rather than short-term irregularities or missing observations. To ensure consistency with observed market data, the reconstructed values are anchored back to the original scale. This is done using either additive anchoring, which aligns mean levels, or multiplicative anchoring, which preserves proportional relationships. Anchoring ensures that filled values remain comparable to observed spreads and do not introduce level shifts.
 
-Hence, Hankel matrix is decomposed as: **H = UΣVᵀ**
-Where:
-- **U**: Left singular vectors (temporal patterns)
-- **Σ**: Singular values (importance of each pattern)
-- **V**: Right singular vectors (spatial patterns)
-
-### 3. Low-Rank Reconstruction
-We reconstruct using the top k singular values:
-
-**H_reconstructed = Σᵢ₌₁ᵏ σᵢ uᵢ vᵢᵀ**
-
-This filters noise and captures the dominant term structure dynamics.
-
-### 4. Anchoring Methods
-To ensure reconstructed values align with observed data:
-
-- **Additive Anchoring**: `anchored_value = reconstructed + (mean_observed - mean_reconstructed)`
-- **Multiplicative Anchoring**: `anchored_value = reconstructed × (mean_observed / mean_reconstructed)`
-
-### 5. Iterative Refinement
-We iteratively increase k until convergence (measured by L1/L2 norms).
+Finally, the reconstruction is refined iteratively by increasing the number of retained components k. At each step, convergence is monitored using L1 and L2 norm differences between successive reconstructions. The process stops once improvements stabilize, indicating that the dominant structure has been captured and further components add limited value.
 
 ### Key Ideas
 - The CDS dataset is treated as a **time × maturity matrix**.
@@ -72,7 +49,7 @@ We iteratively increase k until convergence (measured by L1/L2 norms).
 - Missing values are reconstructed using these shared patterns.
 - **Observed market data is never modified**.
 
-### Design Principles
+### Design Principles used for Robustness 
 - No forward-filling or simple interpolation
 - No averaging across time
 - No distortion of observed data points
