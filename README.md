@@ -107,7 +107,7 @@ This methodology should be viewed as a **data quality enhancement step**, not a 
 
 ## Notes and Limitations
 
-The filled values are estimates and should not replace real market observations when available. Additionally the method assumes stable cross-maturity relationships. Thus it is best suited for analytics and reporting, not trade execution
+The filled values are estimates doesnot not replace real market observations. Additionally the method assumes stable cross-maturity relationships. Thus it is best suited for analytics and reporting, not trade execution
 
 ---
 
