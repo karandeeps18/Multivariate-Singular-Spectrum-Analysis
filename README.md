@@ -5,7 +5,7 @@
 This project addresses missing data in historical **Credit Default Swap (CDS) term structure spreads** across multiple maturities. This project addresses a critical challenge in credit risk analysis; handling incomplete Credit Default Swap (CDS) spread data. CDS spreads are essential market indicators that reflect the creditworthiness of corporate entities, but real-world datasets often contain missing values due to illiquid trading periods, data collection issues, or market disruptions.
 The objective is to **fill missing CDS spreads in a disciplined and transparent manner**, while **preserving observed market data and economic structure**. 
 
-The project is to understand how to deal with missing spread data and is borrowed from Stein, Harvey J. and Zhang, Yan, Big Data's Dirty Secret (June 29, 2018). Available at SSRN: https://ssrn.com/abstract=3205524 or http://dx.doi.org/10.2139/ssrn.3205524
+The project is to understand how to deal with missing spread data and is replication of Stein, Harvey J. and Zhang, Yan, Big Data's Dirty Secret (June 29, 2018). Available at SSRN: https://ssrn.com/abstract=3205524 or http://dx.doi.org/10.2139/ssrn.3205524
 
 ---
 
